@@ -3,16 +3,29 @@ import MapSearch from "./MapSearch";
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 export default function Map() {
   // declare state variables
-  const { searchLocation, setSearchLocation } = useState("");
+  const { searchLocation, setSearchLocation } = useState(
+    "Gill Lane, Grassmoor, Chesterfield, Derbyshire, UK, S42 5AN"
+  );
+  const { input, setInput } = useState("");
   // prop functions to handle input form
   const handleChange = (e) => {
-    setSearchLocation(e.target.value);
+    setInput(e.target.value);
+    console.log(input);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(searchLocation);
+    setSearchLocation(input);
   };
 
+  const props = {
+    searchLocation,
+    setSearchLocation,
+    input,
+    setInput,
+    handleChange,
+    handleSubmit,
+  };
   // create user input form, state to handle changes, and submit
   // pass these as props to MapSearch, which will render the form and handle the input
   // this will be then be used as a callback function in Map component
@@ -43,17 +56,17 @@ export default function Map() {
 
     // initialize the map after the script is loaded
     window.initMap = function () {
-      const happyWired = new google.maps.LatLng(53.23772, -1.42575);
+      const initialSearchLocation = new google.maps.LatLng(53.19572, -1.39662);
       const map = new google.maps.Map(document.getElementById("map"), {
-        center: happyWired,
-        zoom: 15,
+        center: initialSearchLocation,
+        zoom: 16,
       });
 
       const infowindow = new google.maps.InfoWindow();
       const service = new google.maps.places.PlacesService(map);
 
       const request = {
-        query: "The Pommergranate Theatre, Chesterfield, UK",
+        query: { searchLocation },
         fields: ["name", "geometry"],
       };
 
@@ -85,7 +98,7 @@ export default function Map() {
 
   return (
     <div className="container" style={{ height: "100vh" }}>
-      <MapSearch />
+      <MapSearch {...props} />
       <div id="map" style={{ height: "80%", width: "80%" }}></div>
     </div>
   );
