@@ -10,6 +10,7 @@ export default function MapSearch({
     <div className="searchContainer">
       <form onSubmit={handleSubmit}>
         <input type="text" value={input} onChange={handleChange} />
+        <button type="submit">Search</button>
       </form>
     </div>
   );

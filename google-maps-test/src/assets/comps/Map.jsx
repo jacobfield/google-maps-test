@@ -3,18 +3,17 @@ import MapSearch from "./MapSearch";
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 export default function Map() {
   // declare state variables
-  const { searchLocation, setSearchLocation } = useState(
+  const [searchLocation, setSearchLocation] = useState(
     "Gill Lane, Grassmoor, Chesterfield, Derbyshire, UK, S42 5AN"
   );
-  const { input, setInput } = useState("");
+  const [input, setInput] = useState("");
   // prop functions to handle input form
   const handleChange = (e) => {
     setInput(e.target.value);
-    console.log(input);
+    // console.log(e.target.value);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(searchLocation);
     setSearchLocation(input);
   };
 
@@ -66,7 +65,7 @@ export default function Map() {
       const service = new google.maps.places.PlacesService(map);
 
       const request = {
-        query: { searchLocation },
+        query: searchLocation,
         fields: ["name", "geometry"],
       };
 
@@ -92,9 +91,9 @@ export default function Map() {
         infowindow.open(map, marker);
       });
     }
-
+    console.log("Updated search location:", searchLocation);
     loadGoogleMaps();
-  }, []);
+  }, [searchLocation]);
 
   return (
     <div className="container" style={{ height: "100vh" }}>
