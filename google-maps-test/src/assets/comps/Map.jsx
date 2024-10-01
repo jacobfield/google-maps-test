@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MapSearch from "./MapSearch";
 
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -9,7 +9,9 @@ export default function Map() {
     "Hayfield House, Chesterfield, UK"
   );
   const [input, setInput] = useState("");
-
+  const mapRef = useRef(null);
+  const serviceRef = useRef(null);
+  const infowindowRef = useRef(null);
   // Prop functions to handle input form
   const handleChange = (e) => {
     setInput(e.target.value);
@@ -19,6 +21,12 @@ export default function Map() {
     e.preventDefault();
     setSearchLocation(input);
   };
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
 
   const props = {
     searchLocation,
@@ -27,6 +35,7 @@ export default function Map() {
     setInput,
     handleChange,
     handleSubmit,
+    handleEnter,
   };
 
   useEffect(() => {
@@ -55,54 +64,66 @@ export default function Map() {
         "marker"
       );
 
-      const initialSearchLocation = new google.maps.LatLng(53.19572, -1.39662);
+      const happyWired = new google.maps.LatLng(53.237888, -1.42528);
       const map = new google.maps.Map(document.getElementById("map"), {
-        center: initialSearchLocation,
+        center: happyWired,
         zoom: 16,
-        mapId: "DEMO_MAP_ID", // You must include a mapId to use AdvancedMarkerElement
+        mapId: "DEMO_MAP_ID", // must be added for advanced markers
       });
 
       const infowindow = new google.maps.InfoWindow();
       const service = new google.maps.places.PlacesService(map);
+      // store current value instances in ref
+      mapRef.current = map;
+      serviceRef.current = service;
+      infowindowRef.current = infowindow;
 
-      const request = {
-        query: searchLocation,
-        fields: ["name", "geometry"],
-      };
+      // call updateMapLocation function
+      updateMapLocation(searchLocation);
+    };
+    loadGoogleMaps();
+  }, []);
 
-      service.findPlaceFromQuery(request, (results, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-          results.forEach((place) => {
-            createAdvancedMarker(place, map, infowindow);
-          });
-          map.setCenter(results[0].geometry.location);
-        }
-      });
+  useEffect(() => {
+    if (mapRef.current && serviceRef.current) {
+      updateMapLocation(searchLocation); // update map location with searchLocation
+    }
+    console.log("Updated search location:", searchLocation);
+  }, [searchLocation]);
+
+  const updateMapLocation = (location) => {
+    const request = {
+      query: location,
+      fields: ["name", "geometry"],
     };
 
-    // Function to create an AdvancedMarkerElement
-    async function createAdvancedMarker(place, map, infowindow) {
-      if (!place.geometry || !place.geometry.location) return;
+    serviceRef.current.findPlaceFromQuery(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+        results.forEach((place) => {
+          createAdvancedMarker(place, mapRef.current, infowindowRef.current);
+        });
+        mapRef.current.setCenter(results[0].geometry.location);
+      }
+    });
+  };
 
-      const { AdvancedMarkerElement } = await google.maps.importLibrary(
-        "marker"
-      );
+  // Function to create an AdvancedMarkerElement
+  async function createAdvancedMarker(place, map, infowindow) {
+    if (!place.geometry || !place.geometry.location) return;
 
-      const marker = new AdvancedMarkerElement({
-        map,
-        position: place.geometry.location,
-        title: place.name || "Location", // Set marker title
-      });
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-      marker.addListener("click", () => {
-        infowindow.setContent(place.name || "");
-        infowindow.open(map, marker);
-      });
-    }
+    const marker = new AdvancedMarkerElement({
+      map,
+      position: place.geometry.location,
+      title: place.name || "Location", // Set marker title
+    });
 
-    console.log("Updated search location:", searchLocation);
-    loadGoogleMaps();
-  }, [searchLocation]);
+    marker.addListener("click", () => {
+      infowindow.setContent(place.name || "");
+      infowindow.open(map, marker);
+    });
+  }
 
   return (
     <div

@@ -1,10 +1,9 @@
 export default function MapSearch({
-  searchLocation,
-  setSearchLocation,
   input,
-  setInput,
+
   handleChange,
   handleSubmit,
+  handleEnter,
 }) {
   return (
     <div
@@ -26,7 +25,12 @@ export default function MapSearch({
           alignItems: "center",
         }}
       >
-        <input type="text" value={input} onChange={handleChange} />
+        <input
+          type="text"
+          value={input}
+          onChange={handleChange}
+          onKeyDown={handleEnter}
+        />
         <button type="submit">Search</button>
       </form>
     </div>
