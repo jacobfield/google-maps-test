@@ -39,7 +39,7 @@ export default function Map() {
       const existingScript = document.getElementById("googleMaps");
       if (!existingScript) {
         const script = document.createElement("Script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap&loading=async`;
         script.id = "googleMaps";
         script.async = true;
         script.defer = true;
