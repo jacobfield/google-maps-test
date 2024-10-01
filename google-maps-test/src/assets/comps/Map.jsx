@@ -1,6 +1,25 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import MapSearch from "./MapSearch";
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 export default function Map() {
+  // declare state variables
+  const { searchLocation, setSearchLocation } = useState("");
+  // prop functions to handle input form
+  const handleChange = (e) => {
+    setSearchLocation(e.target.value);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(searchLocation);
+  };
+
+  // create user input form, state to handle changes, and submit
+  // pass these as props to MapSearch, which will render the form and handle the input
+  // this will be then be used as a callback function in Map component
+
+  // declare state variable for current location
+  // want to get user's current location, and set this as default search location
+
   useEffect(() => {
     // Function to dynamically load the Google Maps Script
 
@@ -66,6 +85,7 @@ export default function Map() {
 
   return (
     <div className="container" style={{ height: "100vh" }}>
+      <MapSearch />
       <div id="map" style={{ height: "80%", width: "80%" }}></div>
     </div>
   );
