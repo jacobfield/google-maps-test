@@ -6,7 +6,7 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 export default function Map() {
   // Declare state variables
   const [searchLocation, setSearchLocation] = useState(
-    "Gill Lane, Grassmoor, Chesterfield, Derbyshire, UK, S42 5AN"
+    "Hayfield House, Chesterfield, UK"
   );
   const [input, setInput] = useState("");
 
