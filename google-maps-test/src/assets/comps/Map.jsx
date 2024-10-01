@@ -24,9 +24,9 @@ export default function Map() {
 
     // initialize the map after the script is loaded
     window.initMap = function () {
-      const sydney = new google.maps.LatLng(-33.867, 151.195);
+      const happyWired = new google.maps.LatLng(53.23772, -1.42575);
       const map = new google.maps.Map(document.getElementById("map"), {
-        center: sydney,
+        center: happyWired,
         zoom: 15,
       });
 
@@ -34,7 +34,7 @@ export default function Map() {
       const service = new google.maps.places.PlacesService(map);
 
       const request = {
-        query: "Museum of Contemporary Art Australia",
+        query: "The Pommergranate Theatre, Chesterfield, UK",
         fields: ["name", "geometry"],
       };
 
