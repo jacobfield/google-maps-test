@@ -131,7 +131,13 @@ export default function Map() {
   return (
     <div
       className="container"
-      style={{ height: "100vh", backgroundColor: "gray" }}
+      style={{
+        height: "100vh",
+        backgroundColor: "gray",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
     >
       <MapSearch {...props} />
       <div id="map" style={{ height: "80%", width: "80%" }}></div>
