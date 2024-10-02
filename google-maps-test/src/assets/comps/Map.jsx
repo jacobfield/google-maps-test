@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import MapSearch from "./MapSearch";
-
+import useGeolocation from "../hooks/useGeolocation";
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export default function Map() {
@@ -37,7 +37,10 @@ export default function Map() {
     handleSubmit,
     handleEnter,
   };
-
+  // Using the custom hook to get the current coordinates
+  const coordinates = useGeolocation();
+  // Destructuring latitude and longitude from the coordinates object
+  const { latitude, longitude } = coordinates;
   useEffect(() => {
     // Function to dynamically load the Google Maps Script
     const loadGoogleMaps = (callback) => {
@@ -64,9 +67,9 @@ export default function Map() {
         "marker"
       );
 
-      const happyWired = new google.maps.LatLng(53.237888, -1.42528);
+      const initialLocation = new google.maps.LatLng(latitude, longitude);
       const map = new google.maps.Map(document.getElementById("map"), {
-        center: happyWired,
+        center: initialLocation,
         zoom: 16,
         mapId: "DEMO_MAP_ID", // must be added for advanced markers
       });
