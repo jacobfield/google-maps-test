@@ -42,7 +42,7 @@ body {
   height: 18px;
   background-color: white;
   border-radius: 50%;
-  bottom: 3px;
+  bottom: 3.5px;
   left: 3px;
   transition: transform 0.4s;
 }
@@ -56,6 +56,14 @@ body {
   transform: translateX(25px);
 }
 
+.icon {
+  transition: transform 0.3 ease;
+  position: absolute;
+  /* left: px; */
+}
+.icon-right {
+  transform: translateX(25px); /* Increase this to make the icon move further */
+}
 /* Add hover effect for better interactivity */
 .switch:hover {
   background-color: #bbb;

@@ -35,7 +35,9 @@ export default function AppContainer({ children }) {
           id="themeToggle"
         />
         <label htmlFor="themeToggle" className="switch">
-          <span className="icon">{!darkTheme ? "🌞" : "🌛"}</span>
+          <span className={`icon ${!darkTheme ? "icon-right" : ""}`}>
+            {!darkTheme ? "🌞" : "🌛"}
+          </span>
         </label>
       </div>
       <div
