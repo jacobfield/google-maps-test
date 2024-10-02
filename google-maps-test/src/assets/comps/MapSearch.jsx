@@ -26,6 +26,7 @@ export default function MapSearch({
         }}
       >
         <input
+          className="formInputBox"
           type="text"
           value={input}
           onChange={handleChange}

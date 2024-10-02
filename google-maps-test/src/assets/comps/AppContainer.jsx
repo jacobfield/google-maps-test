@@ -26,15 +26,18 @@ export default function AppContainer({ children }) {
         alignItems: "center",
       }}
     >
+      <hr style={{ visibility: "hidden" }} />
       <div className="form">
         <input
           className="formInput"
           type="checkbox"
           onChange={() => setDarkTheme(!darkTheme)}
+          id="themeToggle"
         />
-        <label className="formLabel">Toggle Theme</label>
+        <label htmlFor="themeToggle" className="switch">
+          {/* Toggle Theme/ */}
+        </label>
       </div>
-      <hr />
       <div
         style={{
           height: "100vh",

@@ -15,3 +15,58 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* Hide the original checkbox */
+.formInput[type="checkbox"] {
+  display: none;
+}
+
+/* Custom toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+  background-color: #ccc;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.4s;
+  margin-left: 10px; /* Adds spacing between input and switch */
+}
+
+/* The slider/knob */
+.switch::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  bottom: 3px;
+  left: 3px;
+  transition: transform 0.4s;
+}
+
+/* When the checkbox is checked, move the knob to the right and change the background color */
+.formInput[type="checkbox"]:checked + .switch {
+  background-color: #007bff;
+}
+
+.formInput[type="checkbox"]:checked + .switch::before {
+  transform: translateX(25px);
+}
+
+/* Add hover effect for better interactivity */
+.switch:hover {
+  background-color: #bbb;
+}
+
+/* Styling the label text */
+.formLabel {
+  font-size: 18px;
+  color: inherit;
+  /* Additional padding to prevent text overlapping */
+  padding-right: 10px; /* Space between label and slider */
+  margin-bottom: 0; /* Remove default bottom margin */
+  display: inline-block; /* Ensures label is inline with switch */
+}
