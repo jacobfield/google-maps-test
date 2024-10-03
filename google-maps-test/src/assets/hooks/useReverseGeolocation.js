@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import loadGoogleMaps from "../utils/loadGoogleMaps";
+import { useState, useEffect } from "react";
 
 export default function useReverseGeolocation(latitude, longitude, success) {
   const [locationName, setLocationName] = useState("");
@@ -7,18 +6,18 @@ export default function useReverseGeolocation(latitude, longitude, success) {
   useEffect(() => {
     if (!success) return;
     console.log("useReverseGeolocation If/Else is running");
+
     async function geocodeLatLng(latitude, longitude) {
       console.log(
         "geocodeLatLng function is running within useReverseGeolocation"
       );
       try {
-        const maps = await loadGoogleMaps();
-        const geocoder = new maps.Geocoder();
+        const geocoder = new google.maps.Geocoder();
         const latlng = {
           lat: parseFloat(latitude),
           lng: parseFloat(longitude),
         };
-        geocoder.geocode({ locatoin: latlng }, (results, status) => {
+        geocoder.geocode({ location: latlng }, (results, status) => {
           if (status === "OK" && results[0]) {
             setLocationName(results[0].formatted_address);
           } else {
@@ -26,10 +25,12 @@ export default function useReverseGeolocation(latitude, longitude, success) {
           }
         });
       } catch (error) {
-        console.error("Error loacing Google Maps API: " + error);
+        console.error("Error connecting to Google Maps API: " + error);
       }
     }
-    geocodeLatLng();
+
+    geocodeLatLng(latitude, longitude);
   }, [latitude, longitude, success]);
+
   return locationName;
 }

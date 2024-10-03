@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import MapSearch from "./MapSearch";
 import useGeolocation from "../hooks/useGeolocation";
+import useReverseGeolocation from "../hooks/useReverseGeolocation";
 
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -47,42 +48,6 @@ export default function Map() {
   // Destructuring latitude and longitude from the coordinates object
   const { latitude, longitude, success } = coordinates;
 
-  // Define useReverseGeolocation within the Map component
-  function useReverseGeolocation(latitude, longitude, success) {
-    const [locationName, setLocationName] = useState("");
-
-    useEffect(() => {
-      if (!success) return;
-      console.log("useReverseGeolocation If/Else is running");
-
-      async function geocodeLatLng(latitude, longitude) {
-        console.log(
-          "geocodeLatLng function is running within useReverseGeolocation"
-        );
-        try {
-          const geocoder = new google.maps.Geocoder();
-          const latlng = {
-            lat: parseFloat(latitude),
-            lng: parseFloat(longitude),
-          };
-          geocoder.geocode({ location: latlng }, (results, status) => {
-            if (status === "OK" && results[0]) {
-              setLocationName(results[0].formatted_address);
-            } else {
-              console.error("Geocoder failed due to: " + status);
-            }
-          });
-        } catch (error) {
-          console.error("Error connecting to Google Maps API: " + error);
-        }
-      }
-
-      geocodeLatLng(latitude, longitude);
-    }, [latitude, longitude, success]);
-
-    return locationName;
-  }
-
   // Declare reverse geo location string at top level (if failure, dummy string)
   const revGeoLocStr = useReverseGeolocation(latitude, longitude, success);
 
@@ -128,8 +93,8 @@ export default function Map() {
 
       // Call updateMapLocation function
       if (success) {
-        console.log("Geolocation successful");
         updateMapLocation(revGeoLocStr);
+        console.log("Geolocation successful");
       } else {
         updateMapLocation(searchLocation);
       }
