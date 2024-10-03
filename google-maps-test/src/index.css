@@ -27,7 +27,7 @@ body {
   display: inline-block;
   width: 50px;
   height: 25px;
-  background-color: #ccc;
+  background-color: #007bff;
   border-radius: 25px;
   cursor: pointer;
   transition: background-color 0.4s;
@@ -44,12 +44,13 @@ body {
   border-radius: 50%;
   bottom: 3.5px;
   left: 3px;
+  top: 3.1px;
   transition: transform 0.4s;
 }
 
 /* When the checkbox is checked, move the knob to the right and change the background color */
 .formInput[type="checkbox"]:checked + .switch {
-  background-color: #007bff;
+  background-color: #ccc;
 }
 
 .formInput[type="checkbox"]:checked + .switch::before {
