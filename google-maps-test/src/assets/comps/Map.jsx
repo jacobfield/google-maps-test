@@ -8,8 +8,25 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 export default function Map() {
   // Declare state variables
   const [searchLocation, setSearchLocation] = useState("London");
-  const [geolocationSuccess, setGeolocationSuccess] = useState(false);
-  const [locationName, setLocationName] = useState("");
+  const [locationAccess, setLocationAccess] = useState(false);
+
+  navigator.permissions
+    .query({ name: "geolocation" })
+    .then((permissionStatus) => {
+      // Handle the current permission state on component load
+      if (permissionStatus.state === "granted") {
+        setLocationAccess(true);
+      }
+
+      // Correctly listen to changes in geolocation permission
+      permissionStatus.onchange = () => {
+        if (permissionStatus.state === "granted") {
+          setLocationAccess(true);
+        } else {
+          setLocationAccess(false);
+        }
+      };
+    });
 
   const [input, setInput] = useState("");
   const mapRef = useRef(null);
@@ -50,7 +67,6 @@ export default function Map() {
 
   // Declare reverse geo location string at top level (if failure, dummy string)
   const revGeoLocStr = useReverseGeolocation(latitude, longitude, success);
-
   useEffect(() => {
     // Function to dynamically load the Google Maps Script
     const loadGoogleMaps = (callback) => {
@@ -101,7 +117,14 @@ export default function Map() {
     };
 
     loadGoogleMaps();
-  }, [latitude, longitude, success, revGeoLocStr, searchLocation]);
+  }, [
+    latitude,
+    longitude,
+    success,
+    revGeoLocStr,
+    searchLocation,
+    locationAccess,
+  ]);
 
   useEffect(() => {
     if (mapRef.current && serviceRef.current) {
