@@ -43,7 +43,7 @@ export default function useGeolocation() {
       setCoordinates({ latitude, longitude, success: false });
       console.log("G'day Mate - Welcome to Australia!");
     }
-  }, []); // Empty dependency array ensures this runs only once
+  }, []); 
 
   // Returning the coordinates from the hook
   return coordinates;

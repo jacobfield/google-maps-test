@@ -7,12 +7,12 @@ export default function AppContainer({ children }) {
 
   const themeStyles = darkTheme
     ? {
-        backgroundColor: "#343a40",
-        color: "#f8f9fa",
-      }
-    : {
         backgroundColor: "#f8f9fa",
         color: "#343a40",
+      }
+    : {
+        backgroundColor: "#343a40",
+        color: "#f8f9fa",
       };
 
   return (
@@ -36,7 +36,7 @@ export default function AppContainer({ children }) {
         />
         <label htmlFor="themeToggle" className="switch">
           <span className={`icon ${!darkTheme ? "icon-right" : ""}`}>
-            {!darkTheme ? "🌞" : "🌛"}
+            {!darkTheme ? "🌛" : "🌞"}
           </span>
         </label>
       </div>
