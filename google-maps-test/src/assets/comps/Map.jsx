@@ -1,17 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import MapSearch from "./MapSearch";
 import useGeolocation from "../hooks/useGeolocation";
+import useReverseGeolocation from "../hooks/useReverseGeolocation";
+
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export default function Map() {
   // Declare state variables
-  const [searchLocation, setSearchLocation] = useState(
-    "Hayfield House, Chesterfield, UK"
-  );
+  const [searchLocation, setSearchLocation] = useState("London");
+  const [geolocationSuccess, setGeolocationSuccess] = useState(false);
+  const [locationName, setLocationName] = useState("");
+
   const [input, setInput] = useState("");
   const mapRef = useRef(null);
   const serviceRef = useRef(null);
   const infowindowRef = useRef(null);
+
   // Prop functions to handle input form
   const handleChange = (e) => {
     setInput(e.target.value);
@@ -21,6 +25,7 @@ export default function Map() {
     e.preventDefault();
     setSearchLocation(input);
   };
+
   const handleEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -37,10 +42,15 @@ export default function Map() {
     handleSubmit,
     handleEnter,
   };
+
   // Using the custom hook to get the current coordinates
   const coordinates = useGeolocation();
   // Destructuring latitude and longitude from the coordinates object
-  const { latitude, longitude } = coordinates;
+  const { latitude, longitude, success } = coordinates;
+
+  // Declare reverse geo location string at top level (if failure, dummy string)
+  const revGeoLocStr = useReverseGeolocation(latitude, longitude, success);
+
   useEffect(() => {
     // Function to dynamically load the Google Maps Script
     const loadGoogleMaps = (callback) => {
@@ -76,20 +86,26 @@ export default function Map() {
 
       const infowindow = new google.maps.InfoWindow();
       const service = new google.maps.places.PlacesService(map);
-      // store current value instances in ref
+      // Store current value instances in ref
       mapRef.current = map;
       serviceRef.current = service;
       infowindowRef.current = infowindow;
 
-      // call updateMapLocation function
-      updateMapLocation(searchLocation);
+      // Call updateMapLocation function
+      if (success) {
+        updateMapLocation(revGeoLocStr);
+        console.log("Geolocation successful - Updating to user's location");
+      } else {
+        updateMapLocation(searchLocation);
+      }
     };
+
     loadGoogleMaps();
-  }, []);
+  }, [latitude, longitude, success, revGeoLocStr, searchLocation]);
 
   useEffect(() => {
     if (mapRef.current && serviceRef.current) {
-      updateMapLocation(searchLocation); // update map location with searchLocation
+      updateMapLocation(searchLocation); // Update map location with searchLocation
     }
     console.log("Updated search location:", searchLocation);
   }, [searchLocation]);
