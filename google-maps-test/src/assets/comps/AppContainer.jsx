@@ -40,17 +40,7 @@ export default function AppContainer({ children }) {
           </span>
         </label>
       </div>
-      <div
-        style={{
-          height: "100vh",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {children}
-      </div>
+      <div className="mapContainer">{children}</div>
     </div>
   );
 }

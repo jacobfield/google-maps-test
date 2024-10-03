@@ -37,8 +37,8 @@ export default function useGeolocation() {
     function error() {
       // Logging an error message and setting default coordinates
       console.log("Unable to retrieve your location - using default location");
-      const latitude = 53.237888;
-      const longitude = -1.42528;
+      const latitude = coordinates.latitude;
+      const longitude = coordinates.longitude;
       console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
       // Updating the state with the default coordinates
       setCoordinates({ latitude, longitude });

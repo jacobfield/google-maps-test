@@ -1,20 +1,11 @@
 export default function MapSearch({
   input,
-
   handleChange,
   handleSubmit,
   handleEnter,
 }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "30hv",
-        padding: "10px",
-      }}
-    >
+    <div className="mapSearchContainer">
       <form
         onSubmit={handleSubmit}
         label="mapLocationSearchForm"

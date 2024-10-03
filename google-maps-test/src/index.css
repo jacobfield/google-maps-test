@@ -7,9 +7,8 @@
   border-radius: 10px;
 }
 
-/* 
- * Optional: Makes the sample page fill the window. 
- */
+/* * Optional: Makes the sample page fill the window.  */
+
 html,
 body {
   height: 100%;
@@ -32,7 +31,7 @@ body {
   border-radius: 25px;
   cursor: pointer;
   transition: background-color 0.4s;
-  margin-left: 10px; /* Adds spacing between input and switch */
+  margin-left: 10px;
 }
 
 /* The slider/knob */
@@ -63,7 +62,7 @@ body {
   /* left: px; */
 }
 .icon-right {
-  transform: translateX(25px); /* Increase this to make the icon move further */
+  transform: translateX(25px);
 }
 /* Add hover effect for better interactivity */
 .switch:hover {
@@ -75,7 +74,29 @@ body {
   font-size: 18px;
   color: inherit;
   /* Additional padding to prevent text overlapping */
-  padding-right: 10px; /* Space between label and slider */
-  margin-bottom: 0; /* Remove default bottom margin */
-  display: inline-block; /* Ensures label is inline with switch */
+  padding-right: 10px;
+  margin-bottom: 0;
+  display: inline-block;
+}
+
+.mapContainer {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mapSearchContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30hv;
+  padding: 10px;
+}
+
+.mapLocationSearchForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
