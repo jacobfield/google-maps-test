@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 export default function useGeolocation() {
   // Initializing state to store coordinates with default values as null
   const [coordinates, setCoordinates] = useState({
-    latitude: 53.237888,
-    longitude: -1.42528,
+    latitude: 51.508114,
+    longitude: -0.075949,
   });
 
   // Using useEffect to run the geolocation logic once the component mounts
@@ -18,7 +18,7 @@ export default function useGeolocation() {
     } else {
       // If not supported, log a message and set default coordinates
       console.log("Geolocation not supported - using default location");
-      setCoordinates({ latitude: 53.237888, longitude: -1.42528 });
+      setCoordinates({ latitude: 51.508114, longitude: -0.075949 });
     }
 
     // Success callback function for geolocation
