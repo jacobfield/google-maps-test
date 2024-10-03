@@ -6,7 +6,8 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export default function Map() {
   // Declare state variables
-  const [searchLocation, setSearchLocation] = useState("Australia");
+  const [searchLocation, setSearchLocation] = useState("London");
+  const [geolocationSuccess, setGeolocationSuccess] = useState(false);
   const [input, setInput] = useState("");
   const mapRef = useRef(null);
   const serviceRef = useRef(null);
@@ -40,7 +41,11 @@ export default function Map() {
   const coordinates = useGeolocation();
   // Destructuring latitude and longitude from the coordinates object
   const { latitude, longitude, success } = coordinates;
-  console.log(`MAP COMP --- Latitude: ${latitude}, Longitude: ${longitude}`);
+  // console.log(`MAP COMP --- Latitude: ${latitude}, Longitude: ${longitude}`);
+
+  // declare reverse geo location string at top level (if failure, dummy string)
+  const revGeoLocStr = useReverseGeolocation(latitude, longitude, success);
+  // console.log(revGeoLocStr);
 
   useEffect(() => {
     // Function to dynamically load the Google Maps Script
@@ -88,8 +93,8 @@ export default function Map() {
       // if success = true, do nothing, else updateMapLocation
       if (success) {
         console.log("Geolocation successful");
-        setSearchLocation(() => useReverseGeolocation(latitude, longitude));
-        updateMapLocation(searchLocation);
+
+        updateMapLocation(revGeoLocStr);
         // useReverseGeolocation to get the place name
         // set place name to be return from
         // updateMapLocation(searchLocation);
