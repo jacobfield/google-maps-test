@@ -1,17 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import MapSearch from "./MapSearch";
 import useGeolocation from "../hooks/useGeolocation";
-import useReverseGeolocation from "../hooks/useReverseGeolocation";
+
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export default function Map() {
   // Declare state variables
   const [searchLocation, setSearchLocation] = useState("London");
   const [geolocationSuccess, setGeolocationSuccess] = useState(false);
+  const [locationName, setLocationName] = useState("");
+
   const [input, setInput] = useState("");
   const mapRef = useRef(null);
   const serviceRef = useRef(null);
   const infowindowRef = useRef(null);
+
   // Prop functions to handle input form
   const handleChange = (e) => {
     setInput(e.target.value);
@@ -21,6 +24,7 @@ export default function Map() {
     e.preventDefault();
     setSearchLocation(input);
   };
+
   const handleEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -37,15 +41,50 @@ export default function Map() {
     handleSubmit,
     handleEnter,
   };
+
   // Using the custom hook to get the current coordinates
   const coordinates = useGeolocation();
   // Destructuring latitude and longitude from the coordinates object
   const { latitude, longitude, success } = coordinates;
-  // console.log(`MAP COMP --- Latitude: ${latitude}, Longitude: ${longitude}`);
 
-  // declare reverse geo location string at top level (if failure, dummy string)
+  // Define useReverseGeolocation within the Map component
+  function useReverseGeolocation(latitude, longitude, success) {
+    const [locationName, setLocationName] = useState("");
+
+    useEffect(() => {
+      if (!success) return;
+      console.log("useReverseGeolocation If/Else is running");
+
+      async function geocodeLatLng(latitude, longitude) {
+        console.log(
+          "geocodeLatLng function is running within useReverseGeolocation"
+        );
+        try {
+          const geocoder = new google.maps.Geocoder();
+          const latlng = {
+            lat: parseFloat(latitude),
+            lng: parseFloat(longitude),
+          };
+          geocoder.geocode({ location: latlng }, (results, status) => {
+            if (status === "OK" && results[0]) {
+              setLocationName(results[0].formatted_address);
+            } else {
+              console.error("Geocoder failed due to: " + status);
+            }
+          });
+        } catch (error) {
+          console.error("Error connecting to Google Maps API: " + error);
+        }
+      }
+
+      geocodeLatLng(latitude, longitude);
+    }, [latitude, longitude, success]);
+
+    return locationName;
+  }
+
+  // Declare reverse geo location string at top level (if failure, dummy string)
   const revGeoLocStr = useReverseGeolocation(latitude, longitude, success);
-  // console.log(revGeoLocStr);
 
   useEffect(() => {
     // Function to dynamically load the Google Maps Script
@@ -68,7 +107,6 @@ export default function Map() {
     };
 
     // Initialize the map after the script is loaded
-    // Block Start
     window.initMap = async function () {
       const { AdvancedMarkerElement } = await google.maps.importLibrary(
         "marker"
@@ -83,33 +121,26 @@ export default function Map() {
 
       const infowindow = new google.maps.InfoWindow();
       const service = new google.maps.places.PlacesService(map);
-      // store current value instances in ref
+      // Store current value instances in ref
       mapRef.current = map;
       serviceRef.current = service;
       infowindowRef.current = infowindow;
 
-      // call updateMapLocation function THIS IS THE PLACE ----------------------------------------
-
-      // if success = true, do nothing, else updateMapLocation
+      // Call updateMapLocation function
       if (success) {
         console.log("Geolocation successful");
-
         updateMapLocation(revGeoLocStr);
-        // useReverseGeolocation to get the place name
-        // set place name to be return from
-        // updateMapLocation(searchLocation);
       } else {
         updateMapLocation(searchLocation);
       }
-      // updateMapLocation(searchLocation);
     };
-    // Block End
+
     loadGoogleMaps();
-  }, []);
+  }, [latitude, longitude, success, revGeoLocStr, searchLocation]);
 
   useEffect(() => {
     if (mapRef.current && serviceRef.current) {
-      updateMapLocation(searchLocation); // update map location with searchLocation
+      updateMapLocation(searchLocation); // Update map location with searchLocation
     }
     console.log("Updated search location:", searchLocation);
   }, [searchLocation]);

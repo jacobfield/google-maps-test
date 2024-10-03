@@ -6,7 +6,7 @@ export default function useReverseGeolocation(latitude, longitude, success) {
 
   useEffect(() => {
     if (!success) return;
-    //   console.log("useReverseGeolocation If/Else is running");
+    console.log("useReverseGeolocation If/Else is running");
     async function geocodeLatLng(latitude, longitude) {
       console.log(
         "geocodeLatLng function is running within useReverseGeolocation"
