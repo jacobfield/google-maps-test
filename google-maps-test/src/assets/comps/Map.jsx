@@ -94,7 +94,7 @@ export default function Map() {
       // Call updateMapLocation function
       if (success) {
         updateMapLocation(revGeoLocStr);
-        console.log("Geolocation successful");
+        console.log("Geolocation successful - Updating to user's location");
       } else {
         updateMapLocation(searchLocation);
       }
