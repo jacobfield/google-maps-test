@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 export default function useGeolocation() {
   // Initializing state
   const [coordinates, setCoordinates] = useState({
-    latitude: -25.274399,
-    longitude: 133.775131,
+    latitude: 53.201260,
+    longitude: -1.433710,
     success: null,
   });
 

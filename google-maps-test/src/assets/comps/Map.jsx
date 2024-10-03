@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import MapSearch from "./MapSearch";
 import useGeolocation from "../hooks/useGeolocation";
+import useReverseGeolocation from "../hooks/useReverseGeolocation";
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export default function Map() {
   // Declare state variables
-  const [searchLocation, setSearchLocation] = useState(
-    "Barnes Park, Grassmoor, Uk"
-  );
+  const [searchLocation, setSearchLocation] = useState("Australia");
   const [input, setInput] = useState("");
   const mapRef = useRef(null);
   const serviceRef = useRef(null);
@@ -86,8 +85,18 @@ export default function Map() {
 
       // call updateMapLocation function THIS IS THE PLACE ----------------------------------------
 
-      // if success = true, so nothing, else updateMapLocation
-      updateMapLocation(searchLocation);
+      // if success = true, do nothing, else updateMapLocation
+      if (success) {
+        console.log("Geolocation successful");
+        setSearchLocation(() => useReverseGeolocation(latitude, longitude));
+        updateMapLocation(searchLocation);
+        // useReverseGeolocation to get the place name
+        // set place name to be return from
+        // updateMapLocation(searchLocation);
+      } else {
+        updateMapLocation(searchLocation);
+      }
+      // updateMapLocation(searchLocation);
     };
     // Block End
     loadGoogleMaps();
