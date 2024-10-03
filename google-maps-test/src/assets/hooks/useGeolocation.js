@@ -5,6 +5,7 @@ export default function useGeolocation() {
   const [coordinates, setCoordinates] = useState({
     latitude: -25.274399,
     longitude: 133.775131,
+    success: null,
   });
 
   // Using useEffect to run the geolocation logic once the component mounts
@@ -28,7 +29,7 @@ export default function useGeolocation() {
       console.log("Successfully retrieved location");
       console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
       // Updating the state with the retrieved coordinates
-      setCoordinates({ latitude, longitude });
+      setCoordinates({ latitude, longitude, success: true });
     }
 
     // Error callback function for geolocation
@@ -39,7 +40,7 @@ export default function useGeolocation() {
       const longitude = coordinates.longitude;
       console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
       // Updating the state with the default coordinates
-      setCoordinates({ latitude, longitude });
+      setCoordinates({ latitude, longitude, success: false });
       console.log("G'day Mate - Welcome to Australia!");
     }
   }, []); // Empty dependency array ensures this runs only once

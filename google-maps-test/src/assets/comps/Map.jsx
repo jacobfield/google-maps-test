@@ -40,7 +40,7 @@ export default function Map() {
   // Using the custom hook to get the current coordinates
   const coordinates = useGeolocation();
   // Destructuring latitude and longitude from the coordinates object
-  const { latitude, longitude } = coordinates;
+  const { latitude, longitude, success } = coordinates;
   console.log(`MAP COMP --- Latitude: ${latitude}, Longitude: ${longitude}`);
 
   useEffect(() => {
@@ -64,6 +64,7 @@ export default function Map() {
     };
 
     // Initialize the map after the script is loaded
+    // Block Start
     window.initMap = async function () {
       const { AdvancedMarkerElement } = await google.maps.importLibrary(
         "marker"
@@ -83,9 +84,12 @@ export default function Map() {
       serviceRef.current = service;
       infowindowRef.current = infowindow;
 
-      // call updateMapLocation function THIS IS THE PLACE -----------------------------------
+      // call updateMapLocation function THIS IS THE PLACE ----------------------------------------
+
+      // if success = true, so nothing, else updateMapLocation
       updateMapLocation(searchLocation);
     };
+    // Block End
     loadGoogleMaps();
   }, []);
 
