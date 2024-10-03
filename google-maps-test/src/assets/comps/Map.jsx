@@ -6,7 +6,7 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 export default function Map() {
   // Declare state variables
   const [searchLocation, setSearchLocation] = useState(
-    "Hayfield House, Chesterfield, UK"
+    "Barnes Park, Grassmoor, Uk"
   );
   const [input, setInput] = useState("");
   const mapRef = useRef(null);
@@ -41,6 +41,8 @@ export default function Map() {
   const coordinates = useGeolocation();
   // Destructuring latitude and longitude from the coordinates object
   const { latitude, longitude } = coordinates;
+  console.log(`MAP COMP --- Latitude: ${latitude}, Longitude: ${longitude}`);
+
   useEffect(() => {
     // Function to dynamically load the Google Maps Script
     const loadGoogleMaps = (callback) => {
@@ -81,7 +83,7 @@ export default function Map() {
       serviceRef.current = service;
       infowindowRef.current = infowindow;
 
-      // call updateMapLocation function
+      // call updateMapLocation function THIS IS THE PLACE -----------------------------------
       updateMapLocation(searchLocation);
     };
     loadGoogleMaps();
