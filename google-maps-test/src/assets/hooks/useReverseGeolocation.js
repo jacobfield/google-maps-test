@@ -11,6 +11,7 @@ export default function useReverseGeolocation(latitude, longitude, success) {
       //   console.log(
       //     "geocodeLatLng function is running within useReverseGeolocation"
       //   );
+      console.log("Success registered in useReverseGeolocation");
       try {
         const geocoder = new google.maps.Geocoder();
         const latlng = {
